@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  api:
+    build: ./be/apis
+    depends_on:
+      - db
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    volumes:
+      - .:/usr/be/apis/app
+      - node_modules:/usr/be/apis/app/node_modules
+    networks:
+      - app-network
+  
+  client:
+    build: ./fe/crud
+    ports:
+      - "80:80"
+    links:
+      - api
+
+  db:
+    image: mongo:4.1.8-xenial
+    container_name: db
+    restart: unless-stopped
+    volumes:
+      - dbdata:/data/db
+    networks:
+      - app-network
+      
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  dbdata:
+  node_modules:
