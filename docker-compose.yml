@@ -5,6 +5,7 @@ services:
     build: ./be/apis
     depends_on:
       - db
+      - redis
     restart: unless-stopped
     ports:
       - "4000:4000"
@@ -13,8 +14,6 @@ services:
       - node_modules:/usr/be/apis/app/node_modules
     networks:
       - app-network
-    links:
-      - redis
   
   client:
     build: ./fe/crud
